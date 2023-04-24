@@ -1,0 +1,54 @@
+{
+    "Passenger List": [
+        {
+            "Flight Number": "1234",
+            "Status": "silver",
+            "Miles": 1024,
+            "Name": "Silver Passenger"
+        },
+        {
+            "Flight Number": "1234",
+            "Status": "bronze",
+            "Miles": 120,
+            "Name": "Bronze Passenger 2"
+        },
+        {
+            "Flight Number": "1234",
+            "Status": "bronze",
+            "Miles": 800,
+            "Name": "Bronze Passenger 1"
+        }
+    ],
+    "Flight List" : [
+        {
+            "Flight Number": "1234",
+            "From":"SAN",
+            "To":"JFK",
+            "Departure": "2023-05-24T09:00:00@EST",
+            "Arrival": "2023-05-24T11:00:00@EST",
+            "Capacity": 0,
+            "Status" : "cancelled"
+
+        },
+        {
+            "Flight Number": "4321",
+            "From":"SAN",
+            "To":"JFK",
+            "Departure": "2023-05-24T12:00:00@EST",
+            "Arrival": "2023-05-24T14:00:00@EST",
+            "Capacity": 2,
+            "Status" : "scheduled"
+
+        },
+         {
+            "Flight Number": "4325",
+            "From":"SAN",
+            "To":"JFK",
+            "Departure": "2023-05-24T14:00:00@EST",
+            "Arrival": "2023-05-24T16:00:00@EST",
+            "Capacity": 1,
+            "Status" : "scheduled"
+
+        }
+    ]
+}

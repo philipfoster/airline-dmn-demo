@@ -1,0 +1,30 @@
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# OS level file
+.DS_store
+
+# compiled output
+
+/dist
+/build
+/out
+/target
+
+# IDEs and editors
+
+/.gradle
+/.idea
+/.vscode
+.c9/
+*.launch
+*.iml
+.settings/
+.copyarea.db
+**/.copyarea.db
+build/
+.gradle/
+/out
+
+# misc files
+pdrules-dmn-kie-service.xml
