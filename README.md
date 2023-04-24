@@ -75,6 +75,14 @@ First, the airline collects the information necessary to determine how best to g
 
 The airline then uses the DMN standard to model its decision process in the following decision requirements diagram (DRD) for determining the best rebooking solution:
 
+### DRD in Visual Studio code with Kogito Plugin
+![DRD](images/airline-dmn-example.png)
+
+### Curl command to test
+```
+curl -X POST -H "Content-Type: application/json" -d @./src/test/resources/json/rebook2Pax2Flights.json http://localhost:8080/airline
+```
+
 ### Sample request
 ```
 {
