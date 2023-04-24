@@ -26,5 +26,3 @@ build/
 .gradle/
 /out
 
-# misc files
-pdrules-dmn-kie-service.xml
