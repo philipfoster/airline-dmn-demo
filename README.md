@@ -79,7 +79,7 @@ The airline then uses the DMN standard to model its decision process in the foll
 ![DRD](images/airline-dmn-example.png)
 
 ### Curl command to test
-```
+```bash
 curl -X POST -H "Content-Type: application/json" -d @./src/test/resources/json/rebook2Pax2Flights.json http://localhost:8080/airline | json_pp
 ```
 
