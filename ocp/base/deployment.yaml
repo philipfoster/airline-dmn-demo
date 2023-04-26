@@ -32,4 +32,15 @@ spec:
             requests:
               cpu: 100m
               memory: 256Mi
-
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /q/health/live
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /q/health/ready
+          startupProbe:
+            httpGet:
+              port: 8080
+              path: /q/health/started
