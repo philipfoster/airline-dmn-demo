@@ -178,7 +178,7 @@ spec:
         - name: GIT_SCRIPT
           value: >-
             git config --global --add safe.directory /workspace/source && git 
-            checkout main && git add --all && git commit -m "Bump release
+            checkout $(params.GIT_BRANCH) && git add --all && git commit -m "Bump release
             version to $(tasks.generate-build-id.results.build-id)" && eval
             `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && git push -u origin
             $(params.GIT_BRANCH)
