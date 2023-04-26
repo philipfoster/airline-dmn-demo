@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+images:
+  - name: airline-demo
+    newTag: 1.36.1.Final-20230425-213206
+    newName: nexus-docker-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/kogito-demo
+replicas:
+  - name: airline-demo
+    count: 1

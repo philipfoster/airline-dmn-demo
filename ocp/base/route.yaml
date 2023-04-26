@@ -1,0 +1,17 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: airline-demo
+  labels:
+    app: airline-demo
+spec:
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  to:
+    kind: Service
+    name: airline-demo
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

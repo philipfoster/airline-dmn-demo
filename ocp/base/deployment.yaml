@@ -1,0 +1,35 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: "airline-demo"
+  labels:
+    app: airline-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airline-demo
+      type: app-pod
+  template:
+    metadata:
+      labels:
+        app: airline-demo
+        type: app-pod
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: airline-demo
+          image: kogito
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+
