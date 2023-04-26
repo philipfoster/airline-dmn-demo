@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mvn-settings
+data:
+  settings.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">    
+        
+        <profiles>
+            <profile>
+                <id>openshift</id>
+                <repositories>
+                    <repository>
+                        <id>nexus</id>
+                        <url>https://nexus-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/repository/maven-public/</url>
+                        <releases>
+                            <enabled>true</enabled>
+                        </releases>
+                        <snapshots>
+                            <enabled>true</enabled>
+                        </snapshots>
+                    </repository>
+                </repositories>
+                <pluginRepositories>
+                    <pluginRepository>
+                        <id>nexus</id>
+                        <url>https://nexus-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/repository/maven-public/</url>
+                        <releases>
+                            <enabled>true</enabled>
+                        </releases>
+                        <snapshots>
+                            <enabled>true</enabled>
+                        </snapshots>
+                    </pluginRepository>
+                </pluginRepositories>
+            </profile>
+        </profiles>
+        
+        
+        <activeProfiles>
+            <activeProfile>openshift</activeProfile>
+    <!--        <activeProfile>native</activeProfile> --> <!-- activate native builds -->
+        </activeProfiles>
+        
+    </settings>

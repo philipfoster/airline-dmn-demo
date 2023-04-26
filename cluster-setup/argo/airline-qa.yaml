@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: airline-demo-qa
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: airline-demo-qa
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: ocp/overlays/qa
+    repoURL: 'git@github.com:philipfoster/airline-dmn-demo.git'
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      selfHeal: true

@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: get-maven-version
+spec:
+  params:
+    - default: .
+      description: >-
+        The context directory within the repository for sources on which we want
+        to execute maven goals.
+      name: CONTEXT_DIR
+      type: string
+  results:
+    - description: Project version extracted from pom.xml
+      name: project-version
+      type: string
+  steps:
+    - env:
+        - name: HOME
+          value: /tekton/home
+      image: 'docker.io/library/maven:3.9.1-eclipse-temurin'
+      name: get-version
+      resources: {}
+      script: >
+        #!/usr/bin/env bash 
+
+        echo -n `/usr/bin/mvn help:evaluate -Dexpression=project.version -q
+        -DforceStdout -s $(workspaces.maven-settings.path)/settings.xml` | tee 
+        $(results.project-version.path)
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+  workspaces:
+    - description: >-
+        The workspace consisting of the custom maven settings provided by the
+        user.
+      name: maven-settings
+    - description: The workspace consisting of maven project.
+      name: source

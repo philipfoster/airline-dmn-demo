@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: airline-demo
-          image: kogito
+          image: airline-demo
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

@@ -1,0 +1,203 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-deploy-dev
+spec:
+  params:
+    - default: main
+      name: GIT_BRANCH
+      type: string
+  tasks:
+    - name: maven
+      params:
+        - name: MAVEN_IMAGE
+          value: 'docker.io/library/maven:3.9.1-eclipse-temurin'
+        - name: GOALS
+          value:
+            - package
+        - name: MAVEN_MIRROR_URL
+          value: ''
+        - name: SERVER_USER
+          value: ''
+        - name: SERVER_PASSWORD
+          value: ''
+        - name: PROXY_USER
+          value: ''
+        - name: PROXY_PASSWORD
+          value: ''
+        - name: PROXY_PORT
+          value: ''
+        - name: PROXY_HOST
+          value: ''
+        - name: PROXY_NON_PROXY_HOSTS
+          value: ''
+        - name: PROXY_PROTOCOL
+          value: http
+        - name: CONTEXT_DIR
+          value: .
+      runAfter:
+        - generate-build-id
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: scratch-space
+        - name: maven-settings
+          workspace: settings-xml
+    - name: git-clone
+      params:
+        - name: url
+          value: 'git@github.com:philipfoster/airline-dmn-demo.git'
+        - name: revision
+          value: $(params.GIT_BRANCH)
+        - name: refspec
+          value: ''
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '0'
+        - name: sslVerify
+          value: 'true'
+        - name: crtFileName
+          value: ca-bundle.crt
+        - name: subdirectory
+          value: ''
+        - name: sparseCheckoutDirectories
+          value: ''
+        - name: deleteExisting
+          value: 'true'
+        - name: httpProxy
+          value: ''
+        - name: httpsProxy
+          value: ''
+        - name: noProxy
+          value: ''
+        - name: verbose
+          value: 'true'
+        - name: gitInitImage
+          value: >-
+            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:6c3980b3d28c8fb92b17466f5654d5f484ab893f1673ec8f29e49c0d03f8aca9
+        - name: userHome
+          value: /tekton/home
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: scratch-space
+        - name: ssh-directory
+          workspace: git-ssh-key
+    - name: buildah
+      params:
+        - name: IMAGE
+          value: >-
+            nexus-docker-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/airline-demo:$(tasks.generate-build-id.results.build-id)
+        - name: BUILDER_IMAGE
+          value: >-
+            registry.redhat.io/rhel8/buildah@sha256:ac0b8714cc260c94435cab46fe41b3de0ccbc3d93e38c395fa9d52ac49e521fe
+        - name: STORAGE_DRIVER
+          value: vfs
+        - name: DOCKERFILE
+          value: ./Containerfile.jvm
+        - name: CONTEXT
+          value: .
+        - name: TLSVERIFY
+          value: 'true'
+        - name: FORMAT
+          value: oci
+        - name: BUILD_EXTRA_ARGS
+          value: ''
+        - name: PUSH_EXTRA_ARGS
+          value: ''
+        - name: SKIP_PUSH
+          value: 'false'
+      runAfter:
+        - maven
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: scratch-space
+        - name: dockerconfig
+    - name: get-maven-version
+      params:
+        - name: CONTEXT_DIR
+          value: .
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: get-maven-version
+      workspaces:
+        - name: maven-settings
+          workspace: settings-xml
+        - name: source
+          workspace: scratch-space
+    - name: generate-build-id
+      params:
+        - name: base-version
+          value: $(tasks.get-maven-version.results.project-version)
+      runAfter:
+        - get-maven-version
+      taskRef:
+        kind: Task
+        name: generate-build-id
+    - name: yq
+      params:
+        - name: SCRIPT
+          value: >-
+            yq -i e ".images[0].newTag |=
+            \"$(tasks.generate-build-id.results.build-id)\""
+            ocp/overlays/dev/kustomization.yaml
+        - name: image
+          value: >-
+            docker.io/mikefarah/yq:4.27.5@sha256:2be3626ed633fbe1fc33ee9343a1256a6be53334412b2251b9a859f8c145bb53
+        - name: files
+          value: []
+        - name: expression
+          value: ''
+      runAfter:
+        - buildah
+      taskRef:
+        kind: Task
+        name: yq
+      workspaces:
+        - name: source
+          workspace: scratch-space
+    - name: git-cli
+      params:
+        - name: BASE_IMAGE
+          value: >-
+            cgr.dev/chainguard/git:root-2.39@sha256:7759f87050dd8bacabe61354d75ccd7f864d6b6f8ec42697db7159eccd491139
+        - name: GIT_USER_NAME
+          value: Tekton CI
+        - name: GIT_USER_EMAIL
+          value: tekton@organization.com
+        - name: GIT_SCRIPT
+          value: >-
+            git config --global --add safe.directory /workspace/source && git 
+            checkout main && git add --all && git commit -m "Bump release
+            version to $(tasks.generate-build-id.results.build-id)" && eval
+            `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && git push -u origin
+            $(params.GIT_BRANCH)
+        - name: USER_HOME
+          value: /tekton/home
+        - name: VERBOSE
+          value: 'true'
+      runAfter:
+        - yq
+      taskRef:
+        kind: ClusterTask
+        name: git-cli
+      workspaces:
+        - name: source
+          workspace: scratch-space
+        - name: ssh-directory
+          workspace: git-ssh-key
+  workspaces:
+    - name: scratch-space
+    - name: dockerconfig
+    - name: settings-xml
+    - name: git-ssh-key

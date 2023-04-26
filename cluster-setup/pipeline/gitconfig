@@ -1,0 +1,5 @@
+Host Gitlab
+  HostName gitlab.com
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_rsa
+  User philipfoster462
