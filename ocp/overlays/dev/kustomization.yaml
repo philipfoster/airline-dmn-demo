@@ -5,7 +5,7 @@ resources:
 images:
   - name: airline-demo
     newTag: 1.0.0-SNAPSHOT-20230426-211108
-    newName: nexus-docker-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/airline-demo
+    newName: nexus-docker-nexus.apps.cluster-vjv68.vjv68.sandbox471.opentlc.com/airline-demo
 replicas:
   - name: airline-demo
     count: 1

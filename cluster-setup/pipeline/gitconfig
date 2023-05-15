@@ -2,4 +2,4 @@ Host Github
   HostName github.com
   AddKeysToAgent yes
   IdentityFile ~/.ssh/id_rsa
-  User philipfoster
+  User nzhu972

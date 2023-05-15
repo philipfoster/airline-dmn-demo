@@ -15,7 +15,7 @@ data:
                 <repositories>
                     <repository>
                         <id>nexus</id>
-                        <url>https://nexus-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/repository/maven-public/</url>
+                        <url>https://nexus-nexus.apps.cluster-vjv68.vjv68.sandbox471.opentlc.com/repository/maven-public/</url>
                         <releases>
                             <enabled>true</enabled>
                         </releases>
@@ -27,7 +27,7 @@ data:
                 <pluginRepositories>
                     <pluginRepository>
                         <id>nexus</id>
-                        <url>https://nexus-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/repository/maven-public/</url>
+                        <url>https://nexus-nexus.apps.cluster-vjv68.vjv68.sandbox471.opentlc.com/repository/maven-public/</url>
                         <releases>
                             <enabled>true</enabled>
                         </releases>

@@ -92,7 +92,7 @@ spec:
       params:
         - name: IMAGE
           value: >-
-            nexus-docker-nexus.apps.cluster-9xv45.9xv45.sandbox2355.opentlc.com/airline-demo:$(tasks.generate-build-id.results.build-id)
+            nexus-docker-nexus.apps.cluster-vjv68.vjv68.sandbox471.opentlc.com/airline-demo:$(tasks.generate-build-id.results.build-id)
         - name: BUILDER_IMAGE
           value: >-
             registry.redhat.io/rhel8/buildah@sha256:ac0b8714cc260c94435cab46fe41b3de0ccbc3d93e38c395fa9d52ac49e521fe
