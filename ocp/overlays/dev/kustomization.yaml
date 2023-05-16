@@ -4,7 +4,7 @@ resources:
   - ../../base
 images:
   - name: airline-demo
-    newTag: 1.0.0-SNAPSHOT-20230515-233222
+    newTag: 1.0.0-SNAPSHOT-20230516-235008
     newName: nexus-docker-nexus.apps.cluster-vjv68.vjv68.sandbox471.opentlc.com/airline-demo
 replicas:
   - name: airline-demo
